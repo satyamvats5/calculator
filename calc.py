@@ -19,7 +19,8 @@ class calc(Gtk.Window):
 		self.text = Gtk.Entry()
 		vbox.pack_start(self.text, False, False, 0)
 		vbox.pack_end(table, True, True, 0)
-		
+	
+	
 		#Creating Buttons
 		b1  =   createButton("Cls")
 		b2  =   createButton("Bck")
