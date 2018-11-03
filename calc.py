@@ -1,7 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-from gi.repository import Gdk
 class calc(Gtk.Window):
 	def __init__(self):
 		Gtk.Window.__init__(self, title="Calculator")
@@ -62,12 +61,13 @@ class calc(Gtk.Window):
 			button.connect("clicked", self.onClick)
 		b18.connect("clicked", self.equalClick)
 		b1.connect("clicked", self.clear)
+		b2.connect("clicked", self.back)
+		b3.connect("clicked", Gtk.main_quit)
 		
 		#Attaching Buttons to table.
 		
 		table.attach(b1, 0, 1, 0, 1)
 		table.attach(b2, 1, 2, 0, 1)
-		table.attach(Gtk.Label(), 2, 3, 0, 1)
 		table.attach(b3, 3, 4, 0, 1)
 		table.attach(b4, 0, 1, 1, 2)
 		table.attach(b5, 1, 2, 1, 2)
@@ -85,7 +85,7 @@ class calc(Gtk.Window):
 		table.attach(b19, 3, 4, 4, 5)
 		table.attach(b18, 2, 3, 4, 5)
 		table.attach(b17, 1, 2, 4, 5)
-		b3.connect("clicked", Gtk.main_quit)
+		table.attach(Gtk.Label(), 2, 3, 0, 1)
 		self.add(vbox)
 		self.connect("destroy", Gtk.main_quit)
 		self.show_all()
@@ -93,7 +93,6 @@ class calc(Gtk.Window):
 	expr = ""
 	res = False
 	operator = ['+', '-' , '/', '*']
-	digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 	def onClick(self, widget):
 		if self.res and  widget._value not in self.operator:
 			eqn = widget._value
@@ -101,16 +100,23 @@ class calc(Gtk.Window):
 		else:
 			eqn = self.text.get_text()
 			eqn +=  widget._value
-			print(eqn)
 			self.text.set_text(eqn)
 		if self.res == True:
 			self.res = False
 
-	
+	def back(self, widget):
+		temp = list(self.text.get_text())
+		if temp:
+			temp.pop()
+		val = ""
+		for i in temp:
+			val += i
+		self.text.set_text(val)	
+
 	def equalClick(self, widget):
 		res = eval(self.text.get_text())
 		self.res = True
-		self.text.set_text(str(res))
+		self.text.set_text(str(float(res)))
 	def clear(self, widget):
 		self.text.set_text("")
 
